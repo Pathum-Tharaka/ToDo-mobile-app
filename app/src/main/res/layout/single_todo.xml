@@ -45,7 +45,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/checkbox_on_background"
-        tools:ignore="MissingConstraints" />
+        app:srcCompat="@drawable/done"
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/todo1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
