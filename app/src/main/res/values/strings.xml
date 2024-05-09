@@ -4,4 +4,10 @@
     <string name="textview1">TextView</string>
     <string name="todo">TODO</string>
     <string name="todo1">TODO</string>
+    <string name="you_have_x_todos_in_today">You have x ToDos In Today</string>
+    <string name="add_todo">Add ToDo</string>
+    <string name="add_a_new_todo">Add a New ToDo</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="add_todo2">Add ToDo</string>
 </resources>
