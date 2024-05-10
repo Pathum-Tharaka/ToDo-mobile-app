@@ -1,79 +1,71 @@
 package com.example.mobileapp
-import android.R
+
+
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import java.lang.String
-import kotlin.Int
-
 
 class MainActivity : AppCompatActivity() {
-    private var add: Button? = null
-    private var listView: ListView? = null
-    private var count: TextView? = null
-    var context: Context? = null
-    private var dbHandler: DbHandler? = null
-    private var toDos: List<ToDo>? = null
+
+    private lateinit var add: Button
+    private lateinit var listView: ListView
+    private lateinit var count: TextView
+    private lateinit var context: Context
+    private lateinit var dbHandler: DBhandler
+    private lateinit var toDos: MutableList<ToDo>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        context = this
-        dbHandler = DbHandler(context)
-        add = findViewById<Button>(R.id.add)
-        listView = findViewById<ListView>(R.id.todolist)
-        count = findViewById<TextView>(R.id.todocount)
-        toDos = ArrayList<ToDo>()
-        toDos = dbHandler.getAllToDos()
-        val adapter = ToDoAdapter(context, R.layout.single_todo, toDos)
-        listView.setAdapter(adapter)
 
-        //get todo counts from the table
-        val countTodo: Int = dbHandler.countToDo()
-        count.setText("You have $countTodo todos")
-        add.setOnClickListener(View.OnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    AddToDo::class.java
-                )
-            )
-        })
-        listView.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
-            val todo: ToDo = toDos!![position]
+        context = this
+        dbHandler = DBhandler(context)
+
+        add = findViewById(R.id.add)
+        listView = findViewById(R.id.todolist)
+        count = findViewById(R.id.todocount)
+
+        toDos = mutableListOf()
+        toDos = dbHandler.getAllToDos()
+
+        val adapter = ToDoAdapter(context, R.layout.single_todo, toDos)
+        listView.adapter = adapter
+
+        // Get todo counts from the table
+        val countTodo = dbHandler.countToDo()
+        count.text = "You have $countTodo todos"
+
+        add.setOnClickListener {
+            startActivity(Intent(context, AddToDo::class.java))
+        }
+
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val todo = toDos[position]
             val builder = AlertDialog.Builder(context)
-            builder.setTitle(todo.getTitle())
-            builder.setMessage(todo.getDescription())
-            builder.setPositiveButton(
-                "Finished"
-            ) { dialog, which ->
-                todo.setFinished(System.currentTimeMillis())
+            builder.setTitle(todo.title)
+            builder.setMessage(todo.description)
+            builder.setPositiveButton("Finished") { _, _ ->
+                todo.finished = System.currentTimeMillis()
                 dbHandler.updateSingleToDo(todo)
                 startActivity(Intent(context, MainActivity::class.java))
             }
-            builder.setNegativeButton(
-                "Delete"
-            ) { dialog, which ->
-                dbHandler.deleteToDo(todo.getId())
+            builder.setNegativeButton("Delete") { _, _ ->
+                dbHandler.deleteToDo(todo.id)
                 startActivity(Intent(context, MainActivity::class.java))
             }
-            builder.setNeutralButton(
-                "Update"
-            ) { dialog, which ->
-                val intent = Intent(
-                    context,
-                    EditToDo::class.java
-                )
-                intent.putExtra("id", String.valueOf(todo.getId()))
+            builder.setNeutralButton("Update") { _, _ ->
+                val intent = Intent(context, EditToDo::class.java)
+                intent.putExtra("id", todo.id.toString())
                 startActivity(intent)
             }
             builder.show()
-        })
+        }
     }
 }
