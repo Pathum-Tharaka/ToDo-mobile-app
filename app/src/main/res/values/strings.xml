@@ -10,4 +10,8 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="add_todo2">Add ToDo</string>
+    <string name="edit_todo">Edit ToDo</string>
+    <string name="edit_todo2">Edit ToDo</string>
+    <string name="description2">Description</string>
+    <string name="title2">Title</string>
 </resources>
