@@ -8,12 +8,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 
+
 class AddToDo : AppCompatActivity() {
 
     private lateinit var title: EditText
     private lateinit var desc: EditText
     private lateinit var add: Button
-    private lateinit var dbHandler: DBhandler
+    private lateinit var dbHandler: DbHandler
     private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,7 @@ class AddToDo : AppCompatActivity() {
         desc = findViewById(R.id.editTextDescription)
         add = findViewById(R.id.buttonAdd)
         context = this
-        dbHandler = DBhandler(context)
+        dbHandler = DbHandler(context)
 
         add.setOnClickListener {
             val userTitle = title.text.toString()

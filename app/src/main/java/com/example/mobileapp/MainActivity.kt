@@ -1,6 +1,5 @@
 package com.example.mobileapp
 
-
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -12,28 +11,28 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var add: Button
     private lateinit var listView: ListView
     private lateinit var count: TextView
     private lateinit var context: Context
-    private lateinit var dbHandler: DBhandler
+    private lateinit var dbHandler: DbHandler
     private lateinit var toDos: MutableList<ToDo>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         context = this
-        dbHandler = DBhandler(context)
 
+        dbHandler = DbHandler(context)
         add = findViewById(R.id.add)
         listView = findViewById(R.id.todolist)
         count = findViewById(R.id.todocount)
-
         toDos = mutableListOf()
-        toDos = dbHandler.getAllToDos()
+
+        toDos = dbHandler.getAllToDos().toMutableList()
 
         val adapter = ToDoAdapter(context, R.layout.single_todo, toDos)
         listView.adapter = adapter
