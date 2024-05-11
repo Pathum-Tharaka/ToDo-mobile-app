@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         // Get todo counts from the table
         val countTodo = dbHandler.countToDo()
-        count.text = "You have $countTodo todos"
+        count.text = "You have $countTodo works"
 
         add.setOnClickListener {
             startActivity(Intent(context, AddToDo::class.java))
