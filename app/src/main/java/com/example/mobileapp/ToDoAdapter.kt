@@ -1,6 +1,7 @@
 package com.example.mobileapp
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ class ToDoAdapter(context: Context, private val resource: Int, private val todos
 
     private val inflater = LayoutInflater.from(context)
 
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val row = inflater.inflate(resource, parent, false)
 
