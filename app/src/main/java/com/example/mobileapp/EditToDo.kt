@@ -1,9 +1,9 @@
 package com.example.mobileapp
 
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -29,18 +29,22 @@ class EditToDo : AppCompatActivity() {
         edit = findViewById(R.id.buttonEdit)
 
         val id = intent.getStringExtra("id")
-        val todo = dbHandler.getSingleToDo(id?.toInt() ?: 0)
+        val todo = id?.let { dbHandler.getSingleToDo(it.toInt()) }
 
-        title.setText(todo?.title)
-        des.setText(todo?.description)
+        if (todo != null) {
+            title.setText(todo.title)
+        }
+        if (todo != null) {
+            des.setText(todo.description)
+        }
 
         edit.setOnClickListener {
             val titleText = title.text.toString()
             val decText = des.text.toString()
             updateDate = System.currentTimeMillis()
 
-            val toDo = ToDo(id?.toInt() ?: 0, titleText, decText, updateDate, 0)
-            val state = dbHandler.updateSingleToDo(toDo)
+            val toDo = id?.let { it1 -> ToDo(it1.toInt(), titleText, decText, updateDate, 0) }
+            val state = toDo?.let { it1 -> dbHandler.updateSingleToDo(it1) }
             println(state)
             startActivity(Intent(context, MainActivity::class.java))
         }
