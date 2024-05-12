@@ -14,4 +14,6 @@
     <string name="edit_todo2">Edit ToDo</string>
     <string name="description2">Description</string>
     <string name="title2">Title</string>
+    <string name="search">Search</string>
+    <string name="search1">Search...</string>
 </resources>

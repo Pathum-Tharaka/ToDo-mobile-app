@@ -5,12 +5,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var context: Context
     private lateinit var dbHandler: DbHandler
     private lateinit var toDos: MutableList<ToDo>
+    private lateinit var searchEditText: EditText
+    private lateinit var adapter: ToDoAdapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +35,12 @@ class MainActivity : AppCompatActivity() {
         add = findViewById(R.id.add)
         listView = findViewById(R.id.todolist)
         count = findViewById(R.id.todocount)
+        searchEditText = findViewById(R.id.searchEditText)
         toDos = mutableListOf()
 
         toDos = dbHandler.getAllToDos().toMutableList()
 
-        val adapter = ToDoAdapter(context, R.layout.single_todo, toDos)
+        adapter = ToDoAdapter(context, R.layout.single_todo, toDos)
         listView.adapter = adapter
 
         // Get todo counts from the table
@@ -67,5 +72,15 @@ class MainActivity : AppCompatActivity() {
             }
             builder.show()
         }
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                adapter.filter.filter(s)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 }
