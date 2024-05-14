@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A2C5E1"
     tools:context=".AddToDo">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginTop="108dp"
         android:text="@string/add_a_new_todo"
         android:textSize="30sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,9 +28,10 @@
         android:autofillHints="titles"
         android:ems="10"
         android:hint="@string/title"
+        android:textColor="@color/black"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColorHint="#546E7A"
+        android:textColorHint="#FF3B4E57"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -41,9 +44,10 @@
         android:autofillHints="description"
         android:ems="10"
         android:hint="@string/description"
+        android:textColor="@color/black"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColorHint="#546E7A"
+        android:textColorHint="#3B4E57"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />

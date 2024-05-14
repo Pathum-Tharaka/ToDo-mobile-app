@@ -112,14 +112,12 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
 
     fun updateSingleToDo(toDo: ToDo): Int {
         val db = writableDatabase
-
         val contentValues = ContentValues().apply {
             put(TITLE, toDo.title)
             put(DESCRIPTION, toDo.description)
             put(STARTED, toDo.started)
             put(FINISHED, toDo.finished)
         }
-
         val status = db.update(TABLE_NAME, contentValues, "$ID =?", arrayOf(toDo.id.toString()))
         db.close()
         return status

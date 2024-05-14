@@ -3,10 +3,12 @@ package com.example.mobileapp
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
@@ -62,8 +64,17 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(context, MainActivity::class.java))
             }
             builder.setNegativeButton("Delete") { _, _ ->
-                dbHandler.deleteToDo(todo.id)
-                startActivity(Intent(context, MainActivity::class.java))
+                val alert = androidx.appcompat.app.AlertDialog.Builder(this)
+                alert.setMessage("Are you sure you wanna delete this note?")
+                alert.setCancelable(false)
+                alert.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
+                    Log.d("Cancel", "Silmekten vazgeçildi")
+                })
+                alert.setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
+                    dbHandler.deleteToDo(todo.id)
+                    startActivity(Intent(context, MainActivity::class.java))
+                })
+                alert.show()
             }
             builder.setNeutralButton("Update") { _, _ ->
                 val intent = Intent(context, EditToDo::class.java)
