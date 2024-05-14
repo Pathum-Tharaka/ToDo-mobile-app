@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+
 
 // DbHandler class for managing database operations
 class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VERSION) {
@@ -118,6 +120,8 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
     }
 
     // Function to update a ToDo item in the database
+    // Function to update a ToDo item in the database
+    // Function to update a ToDo item in the database
     fun updateSingleToDo(toDo: ToDo): Int {
         val db = writableDatabase
         val contentValues = ContentValues().apply {
@@ -126,8 +130,16 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
             put(STARTED, toDo.started)
             put(FINISHED, toDo.finished)
         }
-        val status = db.update(TABLE_NAME, contentValues, "$ID =?", arrayOf(toDo.id.toString()))
-        db.close()
-        return status
+
+        try {
+            val status = db.update(TABLE_NAME, contentValues, "$ID =?", arrayOf(toDo.id.toString()))
+            db.close()
+            return status
+        } catch (e: Exception) {
+            Log.e("DbHandler", "Error updating ToDo item: ${e.message}")
+            db.close()
+            return -1 // Return -1 to indicate failure
+        }
     }
+
 }

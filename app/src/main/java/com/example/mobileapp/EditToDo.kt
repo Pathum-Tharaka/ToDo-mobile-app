@@ -19,6 +19,8 @@ class EditToDo : AppCompatActivity() {
     private lateinit var context: Context
     private var updateDate: Long = 0
 
+
+
     // Function called when activity is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

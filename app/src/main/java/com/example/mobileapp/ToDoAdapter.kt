@@ -87,10 +87,16 @@ class ToDoAdapter(
         }
 
         // Publish the filtered results
+        // Publish the filtered results
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredTodos = results?.values as MutableList<ToDo>
+            if (results != null && results.values != null) {
+                filteredTodos = results.values as MutableList<ToDo>
+            } else {
+                filteredTodos = mutableListOf() // Reset filteredTodos if no results
+            }
             notifyDataSetChanged()
         }
+
     }
 }
