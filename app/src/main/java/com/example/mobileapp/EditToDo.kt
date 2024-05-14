@@ -8,56 +8,66 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+// EditToDo class responsible for editing a to-do item
 class EditToDo : AppCompatActivity() {
 
+    // UI elements and variables declaration
     private lateinit var titleEditText: EditText
-    private lateinit var descriptionEditText: EditText
+    private lateinit var desEditText: EditText
     private lateinit var editButton: Button
     private lateinit var dbHandler: DbHandler
     private lateinit var context: Context
-    private var todoId: Int = 0
+    private var updateDate: Long = 0
 
+    // Function called when activity is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_to_do)
 
+        // Initialize context and database handler
         context = this
         dbHandler = DbHandler(context)
 
+        // Initialize UI elements
         titleEditText = findViewById(R.id.editToDoTextTitle)
-        descriptionEditText = findViewById(R.id.editToDoTextDescription)
+        desEditText = findViewById(R.id.editToDoTextDescription)
         editButton = findViewById(R.id.buttonEdit)
 
+        // Retrieve to-do ID from intent and fetch corresponding to-do from database
         val id = intent.getStringExtra("id")
-        val todo = id?.let { dbHandler.getSingleToDo(it.toInt()) }
+        val todo = id?.toInt()?.let { dbHandler.getSingleToDo(it) }
 
-        if (todo != null) {
-            todoId = todo.id
-            titleEditText.setText(todo.title)
-            descriptionEditText.setText(todo.description)
-        } else {
-            showToast("Invalid todo id")
-            finish() // Finish the activity if the todo id is invalid
-        }
+        // If to-do exists, populate UI elements with its data
+        todo?.let { toDo ->
+            titleEditText.setText(toDo.title)
+            desEditText.setText(toDo.description)
 
-        editButton.setOnClickListener {
-            val titleText = titleEditText.text.toString()
-            val descriptionText = descriptionEditText.text.toString()
-            val updateDate = System.currentTimeMillis()
+            // OnClickListener for editButton to update to-do item
+            editButton.setOnClickListener {
+                val titleText = titleEditText.text.toString()
+                val descText = desEditText.text.toString()
+                updateDate = System.currentTimeMillis()
 
-            val updatedTodo = ToDo(todoId, titleText, descriptionText, updateDate, 0)
-            val updateStatus = dbHandler.updateSingleToDo(updatedTodo)
+                // Create updated ToDo object with new data
+                val updatedToDo = ToDo(
+                    id = toDo.id,
+                    title = titleText,
+                    description = descText,
+                    started = toDo.started, // Access started property directly
+                    finished = updateDate
+                )
 
-            if (updateStatus > 0) {
-                showToast("Todo updated successfully")
-                startActivity(Intent(context, MainActivity::class.java))
-            } else {
-                showToast("Failed to update todo")
+                // Update to-do item in the database
+                val status = dbHandler.updateSingleToDo(updatedToDo)
+
+                // If update successful, navigate back to MainActivity
+                if (status > 0) {
+                    startActivity(Intent(context, MainActivity::class.java))
+                } else {
+                    // Show toast message if update fails
+                    Toast.makeText(context, "Failed to update to-do item", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

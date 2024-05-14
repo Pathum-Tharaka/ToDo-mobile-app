@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-
+// DbHandler class for managing database operations
 class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VERSION) {
 
     companion object {
@@ -21,6 +21,7 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         private const val FINISHED = "finished"
     }
 
+    // Function called when database is created
     override fun onCreate(db: SQLiteDatabase) {
         val TABLE_CREATE_QUERY = "CREATE TABLE $TABLE_NAME (" +
                 "$ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -33,12 +34,14 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         db.execSQL(TABLE_CREATE_QUERY)
     }
 
+    // Function called when database is upgraded
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         val DROP_TABLE_QUERY = "DROP TABLE IF EXISTS $TABLE_NAME"
         db.execSQL(DROP_TABLE_QUERY)
         onCreate(db)
     }
 
+    // Function to add a new ToDo item to the database
     fun addToDo(toDo: ToDo) {
         val sqLiteDatabase = writableDatabase
 
@@ -53,6 +56,7 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         sqLiteDatabase.close()
     }
 
+    // Function to get count of all ToDo items in the database
     fun countToDo(): Int {
         val db = readableDatabase
         val query = "SELECT * FROM $TABLE_NAME"
@@ -60,6 +64,7 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         return cursor.count
     }
 
+    // Function to retrieve all ToDo items from the database
     fun getAllToDos(): List<ToDo> {
         val toDos = mutableListOf<ToDo>()
         val db = readableDatabase
@@ -82,12 +87,14 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         return toDos
     }
 
+    // Function to delete a ToDo item from the database
     fun deleteToDo(id: Int) {
         val db = writableDatabase
         db.delete(TABLE_NAME, "id =?", arrayOf(id.toString()))
         db.close()
     }
 
+    // Function to retrieve a single ToDo item from the database based on its ID
     fun getSingleToDo(id: Int): ToDo? {
         val db = writableDatabase
 
@@ -110,6 +117,7 @@ class DbHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, VER
         }
     }
 
+    // Function to update a ToDo item in the database
     fun updateSingleToDo(toDo: ToDo): Int {
         val db = writableDatabase
         val contentValues = ContentValues().apply {
